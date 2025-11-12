@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Sistem Klasifikasi Sentimen{% endblock title %}</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: auto; background-color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #cc0000; text-align: center; }
+        .nav-links { text-align: center; margin-bottom: 20px; }
+        .nav-links a { margin: 0 15px; text-decoration: none; color: #007bff; font-weight: bold; }
+        .error, .success { padding: 10px; margin-bottom: 15px; border-radius: 5px; }
+        .error { background-color: #ffe0e0; color: red; border: 1px solid red; }
+        /* Konten Spesifik untuk diisi oleh template lain */
+        .content { min-height: 400px; padding: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistem Klasifikasi Sentimen Review Google Play Store</h1>
+        
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a> |
+            <a href="{% url 'scrape' %}">1. Scraping</a> |
+            <a href="{% url 'preprocess' %}">2. Preprocessing</a> |
+            <a href="{% url 'results' %}">3. Hasil Akhir</a>
+        </div>
+
+        <hr>
+
+        <div class="content">
+            {% if error_message %}
+                <p class="error">TERJADI KESALAHAN: {{ error_message }}</p>
+            {% endif %}
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div>
+</body>
+</html>

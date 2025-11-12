@@ -1,0 +1,108 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}3. Hasil Akhir & Klasifikasi{% endblock title %}
+
+{% block content %}
+    <h2>Langkah 3: Hasil Klasifikasi Sentimen</h2>
+    
+    <div style="background:#eaf9f0; border:1px solid #b8e7c8; padding:12px 14px; border-radius:6px; margin:12px 0;">
+        <b>Panduan Singkat:</b>
+        <ul style="margin:8px 0 0 18px; padding:0;">
+            <li>Dua model digunakan: XGBoost dan Adaboost.</li>
+            <li>Lihat “Distribusi Sentimen” untuk persentase Positif vs Negatif per model.</li>
+            <li>Tabel “Preview Hasil” menampilkan prediksi per ulasan untuk kedua model.</li>
+            <li>Gunakan tombol “Download Hasil Lengkap (CSV)” untuk mengunduh semua prediksi.</li>
+        </ul>
+    </div>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% else %}
+        
+        <style>
+            .results-layout { display: flex; justify-content: space-between; gap: 30px; margin-bottom: 30px; }
+            .results-stats { width: 35%; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+            .results-table { width: 65%; }
+            .pie-charts-container { display: flex; justify-content: space-around; margin: 20px 0; flex-wrap: wrap; }
+            .pie-chart-wrapper { text-align: center; margin: 10px; }
+            .pie-chart {
+                width: 150px; height: 150px; border-radius: 50%; margin: 10px auto;
+                position: relative;
+            }
+            .pie-chart-label { font-weight: bold; margin-top: 10px; font-size: 14px; }
+            .table-results th, .table-results td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            .table-results th { background-color: #f2f2f2; }
+            .positif { color: #155724; font-weight: bold; }
+            .negatif { color: #CC0000; font-weight: bold; }
+            .stats-info { text-align: center; margin: 10px 0; font-size: 13px; }
+        </style>
+        
+        <div class="results-layout">
+            
+            <div class="results-stats">
+                <h3>Distribusi Sentimen</h3>
+                
+                <div class="pie-charts-container">
+                    <div class="pie-chart-wrapper">
+                        <div class="pie-chart" 
+                             style="background: conic-gradient(#4CAF50 0% {{ stats_xgb.Positif }}%, #CC0000 {{ stats_xgb.Positif }}% 100%);" 
+                             title="XGBoost: {{ stats_xgb.Positif }}% Positif, {{ stats_xgb.Negatif }}% Negatif"></div>
+                        <div class="pie-chart-label">XGBoost</div>
+                        <div class="stats-info">
+                            <span style="color: #4CAF50;">Positif: <b>{{ stats_xgb.Positif }}%</b></span><br>
+                            <span style="color: #CC0000;">Negatif: <b>{{ stats_xgb.Negatif }}%</b></span>
+                        </div>
+                    </div>
+                    
+                    <div class="pie-chart-wrapper">
+                        <div class="pie-chart" 
+                             style="background: conic-gradient(#4CAF50 0% {{ stats_adaboost.Positif }}%, #CC0000 {{ stats_adaboost.Positif }}% 100%);" 
+                             title="AdaBoost: {{ stats_adaboost.Positif }}% Positif, {{ stats_adaboost.Negatif }}% Negatif"></div>
+                        <div class="pie-chart-label">AdaBoost</div>
+                        <div class="stats-info">
+                            <span style="color: #4CAF50;">Positif: <b>{{ stats_adaboost.Positif }}%</b></span><br>
+                            <span style="color: #CC0000;">Negatif: <b>{{ stats_adaboost.Negatif }}%</b></span>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" style="margin-top: 30px;" action="{% url 'results' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="download_csv" value="1">
+                    <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Download Hasil Lengkap (CSV)
+                    </button>
+                </form>
+
+            </div>
+            
+            <div class="results-table">
+                <h3>Preview Hasil Klasifikasi</h3>
+                <p>Menampilkan 10 ulasan teratas dengan prediksi dari dua model.</p>
+                <table class="table-results">
+                    <thead>
+                        <tr>
+                            <th>Ulasan Asli</th>
+                            <th>XGBoost</th>
+                            <th>AdaBoost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr>
+                            <td>{{ row.content|truncatechars:100 }}</td>
+                            <td class="{% if row.Prediksi_XGBoost == 'Positif' %}positif{% else %}negatif{% endif %}">
+                                {{ row.Prediksi_XGBoost }}
+                            </td>
+                            <td class="{% if row.Prediksi_Adaboost == 'Positif' %}positif{% else %}negatif{% endif %}">
+                                {{ row.Prediksi_Adaboost }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    {% endif %}
+{% endblock content %}

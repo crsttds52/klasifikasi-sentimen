@@ -1,0 +1,70 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}2. Preprocessing Data{% endblock title %}
+
+{% block content %}
+    <h2>Langkah 2: Preprocessing Data</h2>
+    
+    <div style="background:#fff7e6; border:1px solid #ffd18a; padding:12px 14px; border-radius:6px; margin:12px 0;">
+        <b>Panduan Singkat:</b>
+        <ul style="margin:8px 0 0 18px; padding:0;">
+            <li>Data mentah dibersihkan melalui: Case Folding, Normalisasi Alay, Stopword Removal, dan Stemming.</li>
+            <li>Bandingkan kolom “Ulasan Asli” dengan “Teks Akhir” untuk melihat hasil pembersihan.</li>
+            <li>Jika data tidak muncul, kembali ke halaman Scraping untuk mengambil ulang data.</li>
+            <li>Jika sudah sesuai, lanjutkan ke proses Klasifikasi (Langkah 3).</li>
+        </ul>
+    </div>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'scrape' %}" style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Kembali ke Scraping
+            </a>
+        </div>
+    {% elif comparison_data %}
+    
+
+        <h3 style="margin-top: 30px;">Perbandingan Data (10 Baris Teratas)</h3>
+
+        <style>
+            .comparison-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            .comparison-table th, .comparison-table td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+            .comparison-table th { background-color: #f2f2f2; font-weight: bold; }
+            .bersih-col { background-color: #e6f7ff; }
+            .comparison-table td { max-width: 400px; word-wrap: break-word; }
+        </style>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Ulasan Asli (Mentah)</th>
+                    <th>Rating</th>
+                    <th class="bersih-col">Teks Akhir (Bersih & Di-stem)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in comparison_data %}
+                <tr>
+                    <td>{{ item.content|truncatewords:30 }}</td>
+                    <td>{{ item.score }}</td>
+                    <td class="bersih-col">{{ item.teks_bersih|truncatewords:30 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="{% url 'results' %}" style="padding: 15px 30px; font-size: 18px; background-color: #CC0000; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Lanjut ke Klasifikasi Sentimen (Langkah 3)
+            </a>
+        </div>
+    {% else %}
+        <p class="error">Tidak ada data untuk diproses. Silakan kembali ke halaman scraping.</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'scrape' %}" style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Kembali ke Scraping
+            </a>
+        </div>
+    {% endif %}
+{% endblock content %}

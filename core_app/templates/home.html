@@ -1,0 +1,16 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}Beranda{% endblock title %}
+
+{% block content %}
+    <h2>Selamat Datang!</h2>
+    <p>Alat ini menganalisis ulasan Gojek dari Play Store secara otomatis. Proses akan melalui 4 tahap: Scraping, Preprocessing, Klasifikasi, dan Hasil Akhir.</p>
+    <p>Metodologi: Kami menggunakan model XGBoost (utama) dan AdaBoost (pembanding) untuk transparansi analisis.</p>
+    
+    <div style="text-align: center; margin-top: 50px;">
+        <h3>Siap Memulai Analisis Otomatis?</h3>
+        <a href="{% url 'scrape' %}" style="padding: 15px 30px; font-size: 18px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+            Mulai Proses Klasifikasi (Langkah 1)
+        </a>
+    </div>
+{% endblock content %}

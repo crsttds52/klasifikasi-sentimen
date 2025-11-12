@@ -1,0 +1,57 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}1. Scraping Data{% endblock title %}
+
+{% block content %}
+    <h2>Langkah 1: Input Link dan Scraping Data</h2>
+    
+    <div style="background:#eef7ff; border:1px solid #b6ddff; padding:12px 14px; border-radius:6px; margin:12px 0;">
+        <b>Panduan Singkat:</b>
+        <ol style="margin:8px 0 0 18px; padding:0;">
+            <li>Tempelkan URL aplikasi Google Play Store pada kolom “Link”.</li>
+            <li>Tentukan jumlah ulasan yang ingin diambil pada “Count” , Maksimal 20,000 ulasan.</li>
+            <li>Klik “Scrape Data” untuk mengambil ulasan terbaru.</li>
+            <li>Periksa preview data mentah yang tampil di bawah.</li>
+            <li>Jika sudah sesuai, klik “Lanjut ke Preprocessing”.</li>
+        </ol>
+    </div>
+    
+    <form method="post" style="margin-bottom: 30px;">
+        {% csrf_token %}
+        <label for="input_url">Link Google Play Store:</label>
+        <input type="text" name="input_url" placeholder="Contoh: https://play.google.com/store/apps/details?id=com.gojek.app" style="width: 100%; padding: 10px; margin-top: 5px;" required>
+        <div style="margin-top:8px; background:#e6ffed; border:1px solid #b7eb8f; color:#1b5e20; padding:8px 10px; border-radius:6px; font-size:12px;">
+            Gunakan URL aplikasi Play Store dengan <code>details?id=...</code> — contoh: <code>https://play.google.com/store/apps/details?id=com.gojek.app</code>..
+        </div>
+        
+        <label for="input_count" style="margin-top: 15px; display: block;">Jumlah ulasan yang ingin diambil <span style="font-size:12px; color:#555;">(maks 20.000)</span>:</label>
+        <input type="number" name="input_count" value="1000" min="10" max="20000" style="padding: 10px; margin-top: 5px; width: 150px;" required>
+        
+        <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; margin-top: 20px;">
+            Scrape Data (Ambil Ulasan Terbaru)
+        </button>
+    </form>
+    
+    {% if success_message %}
+        <p class="success" style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">{{ success_message }}</p>
+    {% endif %}
+
+    {% if results %}
+        <h3>Preview Data Mentah ({{ results|length }} Baris Teratas)</h3>
+        <table>
+            <thead><tr><th>Ulasan Asli</th><th>Rating</th></tr></thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        <td>{{ row.content }}</td>
+                        <td>{{ row.score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <a href="{% url 'preprocess' %}" style="margin-top: 20px; padding: 10px 20px; background-color: orange; color: white; text-decoration: none; display: block; text-align: center;">
+            Lanjut ke Preprocessing (Langkah 2)
+        </a>
+    {% endif %}
+{% endblock content %}
