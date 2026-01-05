@@ -1,0 +1,103 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}Tentang Sistem{% endblock title %}
+
+{% block content %}
+    <style>
+        .intro-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+        .process-section {
+            margin: 30px 0;
+        }
+        .process-step {
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .process-step h3 {
+            color: #4CAF50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            background-color: #4CAF50;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+    </style>
+
+    <div class="intro-section">
+        <h2 style="margin-top: 0; color: #333;">Tentang Sistem Klasifikasi Sentimen</h2>
+        <p style="font-size: 1.1em; line-height: 1.6; color: #555;">
+            Sistem ini merupakan aplikasi web untuk klasifikasi sentimen ulasan aplikasi dari Google Play Store. 
+            Sistem menggunakan dua model machine learning yang berbeda (XGBoost dan AdaBoost) untuk melakukan prediksi . 
+            Masing-masing model dilatih menggunakan data ulasan aplikasi Gojek di Google Play Store.
+        </p>
+    </div>
+
+    <div class="process-section">
+        <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px;">Alur Proses Klasifikasi Sentimen</h2>
+        
+        <div class="process-step">
+            <h3>
+                <span class="step-number">1</span>
+                Scraping Data dari Google Play Store
+            </h3>
+            <p style="line-height: 1.8; color: #555;">
+                Di tahap awal ini, sistem akan mengambil data ulasan aplikasi langsung dari Google Play Store. 
+                Anda hanya perlu memasukkan URL Google Play Store dari aplikasi yang ingin anda lakukan proses klasifikasi sentimen
+                dan menentukan jumlah ulasan yang ingin diambil, maksimal 20,000 ulasan. 
+            </p>
+        </div>
+
+        <div class="process-step">
+            <h3>
+                <span class="step-number">2</span>
+                Preprocessing Data
+            </h3>
+            <p style="line-height: 1.8; color: #555;">
+                Data mentah yang telah diambil akan melalui beberapa tahap preprocessing untuk mempersiapkan data sebelum klasifikasi
+                yaitu text cleaning, tokenisasi, normalisasi kata gaul, menghapus stopwords, dan stemming
+            </p>
+        </div>
+
+        <div class="process-step">
+            <h3>
+                <span class="step-number">3</span>
+                Klasifikasi Sentimen dan Hasil Akhir
+            </h3>
+            <p style="line-height: 1.8; color: #555;">
+                Pada tahap ini, data yang sudah dipreprocessing akan melalui proses klasifikasi lengkap yang mencakup:
+            </p>
+            <ul style="line-height: 2; color: #555; margin-left: 50px;">
+                <li><strong>Ekstraksi Fitur dengan TF-IDF</strong> </li>
+                <li><strong>Klasifikasi dengan 2 Model Machine Learning</strong>
+                </li>
+                <li><strong>Visualisasi dan Download Hasil:</strong> Hasil klasifikasi ditampilkan dalam bentuk tabel untuk 10 Teratas
+                    dan pie chart sebagai visualisasi hasil untuk kedua model. Pengguna bisa mengunduh hasil klasifikasi yang lengkap dalam format CSV.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding: 20px;">
+        <a href="{% url 'home' %}" style="color: #4CAF50; text-decoration: none; font-weight: bold; margin-right: 20px;">← Kembali ke Beranda</a>
+        <a href="{% url 'scrape' %}" style="background-color: #4CAF50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">Mulai Klasifikasi</a>
+    </div>
+{% endblock content %}
+

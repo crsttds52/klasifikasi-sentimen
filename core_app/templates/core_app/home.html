@@ -4,157 +4,132 @@
 
 {% block content %}
     <style>
-        .intro-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #4CAF50;
-        }
-        .process-section {
-            margin: 30px 0;
-        }
-        .process-step {
-            background-color: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .process-step h3 {
-            color: #4CAF50;
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-        }
-        .step-number {
-            background-color: #4CAF50;
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        .start-button-section {
+        .hero-section {
             text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        .hero-section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .hero-section p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-button {
+            padding: 18px 40px;
+            font-size: 20px;
+            background-color: white;
+            color: #4CAF50;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            background-color: #f8f9fa;
+        }
+        .features-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
             margin-top: 40px;
+        }
+        .feature-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .feature-card h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .info-section {
+            text-align: center;
+            margin-top: 50px;
             padding: 30px;
             background-color: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
         }
-        .start-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #4CAF50;
-            color: white;
+        .info-section a {
+            color: #4CAF50;
             text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
+            font-weight: bold;
         }
-        .start-button:hover {
-            background-color: #45a049;
-        }
-        .warning-box {
-            background-color: #fff3cd;
-            border: 2px solid #ffc107;
-            border-left: 4px solid #ff9800;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 15px;
-            color: #856404;
-        }
-        .warning-box strong {
-            color: #ff6f00;
-            display: block;
-            margin-bottom: 5px;
+        .info-section a:hover {
+            text-decoration: underline;
         }
     </style>
 
-    <div class="intro-section">
-        <h2 style="margin-top: 0; color: #333;">Sistem Klasifikasi Sentimen</h2>
-        <p style="font-size: 1.1em; line-height: 1.6; color: #555;">
-            Sistem ini adalah aplikasi web untuk klasifikasi sentimen ulasan aplikasi dari Google Play Store. 
-            Sistem menggunakan dua model machine learning yang berbeda (XGBoost dan AdaBoost) untuk melakukan prediksi dan membandingkan 
-            hasilnya secara bersamaan. Masing-masing model dilatih menggunakan data ulasan aplikasi Gojek di Google Play Store
-            dengan hasil akurasi dan f-1 Score sekitar 85% untuk Adaboost dan 88% untuk XGBoost.
+    <div class="hero-section">
+        <h1>Klasifikasi Sentimen Ulasan Google Play Store</h1>
+        <p>
+            Klasifikasi sentimen ulasan aplikasi Google Play Store hanya dengan menginput link
         </p>
-    </div>
-
-    <div class="process-section">
-        <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px;">Alur Proses Klasifikasi Sentimen</h2>
-        
-        <div class="process-step">
-            <h3>
-                <span class="step-number">1</span>
-                Scraping Data dari Google Play Store
-            </h3>
-            <p style="line-height: 1.8; color: #555;">
-                Pada tahap ini, sistem akan mengambil data ulasan aplikasi langsung dari Google Play Store. 
-                Anda perlu memasukkan URL aplikasi yang ingin anda lakukan proses klasifikasi sentimen 
-                dan menentukan jumlah ulasan yang ingin diambil, maksimal 20,000 ulasan. 
-                Sistem akan mengekstrak informasi berupa konten ulasan dan rating dari setiap review yang diambil.
-            </p>
-            <div class="warning-box">
-                <strong>Peringatan:</strong>
-                Jumlah waktu yang dibutuhkan untuk seluruh proses klasifikasi dari scraping, preprocessing sampai hasil akhir
-                akan bervariasi tergantung dari jumlah data(ulasan) yang diambil. Sebelum mengambil data dengan jumlah yang besar bisa
-                mencoba mengambil data dengan jumlah yang lebih kecil terlebih dahulu (seperti 100 - 500 ulasan) untuk memastikan
-                sistem bekerja sesuai harapan.
-            </div>
-        </div>
-
-        <div class="process-step">
-            <h3>
-                <span class="step-number">2</span>
-                Preprocessing Data
-            </h3>
-            <p style="line-height: 1.8; color: #555;">
-                Data mentah yang telah diambil akan melalui beberapa tahap preprocessing untuk mempersiapkan data sebelum klasifikasi:
-            </p>
-            <ul style="line-height: 2; color: #555; margin-left: 50px;">
-                <li><strong>Cleaning:</strong> Mengubah teks menjadi lowercase kemudian menghapus karakter tidak penting seperti URL, mention, dan karakter khusus lainnya
-                    yang tidak bermanfaat untuk klasifikasi sentimen</li>
-                <li><strong>Normalisasi:</strong> melakukan normalisasi kata gaul menggunakan kamus alay</li>
-                <li><strong>Tokenisasi:</strong> Memecah teks menjadi token-token kata</li>
-                <li><strong>Stopwords Removal:</strong> Menghapus kata-kata yang tidak memiliki makna penting (seperti "yang", "di", "ke", dll)</li>
-                <li><strong>Stemming:</strong> Mengubah kata ke bentuk dasarnya menggunakan library Sastrawi untuk bahasa Indonesia</li>
-            </ul>
-        </div>
-
-        <div class="process-step">
-            <h3>
-                <span class="step-number">3</span>
-                Klasifikasi Sentimen dan Hasil Akhir
-            </h3>
-            <p style="line-height: 1.8; color: #555;">
-                Pada tahap ini, data yang sudah dipreprocessing akan melalui proses klasifikasi lengkap yang mencakup:
-            </p>
-            <ul style="line-height: 2; color: #555; margin-left: 50px;">
-                <li>Ekstraksi Fitur dengan TF-IDF:Teks yang sudah dibersihkan diubah menjadi representasi numerik menggunakan 
-                    teknik TF-IDF (Term Frequency-Inverse Document Frequency).</li>
-                <li>Klasifikasi dengan Model Machine Learning: Data yang sudah menjadi vektor fitur diklasifikasikan oleh model Adaboost dan XGBoost.
-                    Setiap model memberikan prediksi sentimen (Positif atau Negatif) untuk setiap ulasan.
-                </li>
-                <li>Visualisasi dan Download Hasil: Hasil klasifikasi ditampilkan dalam bentuk tabel yang menampilkan ulasan asli beserta prediksi dari kedua model. 
-                    Sistem juga akan menyediakan visualisasi distribusi sentimen dalam bentuk pie chart untuk setiap model. 
-                    Bisa mengunduh hasil klasifikasi yang lengkap dalam format CSV .</li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="start-button-section">
-        <h3 style="color: #333; margin-bottom: 20px;">Siap Memulai?</h3>
-        <p style="color: #666; margin-bottom: 25px;">
-            Klik tombol di bawah untuk memulai proses klasifikasi sentimen dari langkah pertama.
-        </p>
-        <a href="{% url 'scrape' %}" class="start-button">
-            Mulai Proses Klasifikasi (Langkah 1)
+        <a href="{% url 'scrape' %}" class="cta-button">
+            Mulai Sekarang →
         </a>
+    </div>
+
+    <div class="features-section">
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Scraping Otomatis</h3>
+            <p>Bisa mengambil data ulasan langsung dari Google Play Store dengan mudah hanya dengan memasukkan URL aplikasi.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Preprocessing</h3>
+            <p>Pembersihan data otomatis dengan normalisasi kata slang, stopword removal, dan stemming untuk bahasa Indonesia.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>Dual Model ML</h3>
+            <p>Klasifikasi menggunakan dua model berbeda bisa untuk dijadikan perbandingan.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Visualisasi & Export</h3>
+            <p>Lihat hasil dalam bentuk pie chart dan download hasil lengkap dalam format CSV untuk analisis lebih lanjut.</p>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <p style="font-size: 1.1em; color: #555;">
+            Ingin mengetahui lebih detail tentang sistem ini? 
+            <a href="{% url 'about' %}">Pelajari lebih lanjut →</a>
+        </p>
     </div>
 {% endblock content %}

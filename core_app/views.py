@@ -11,9 +11,9 @@ DATA_BERSIH_KEY = 'data_bersih_df'
 REVIEW_COLUMN = 'content' 
 
 
-# --- Halaman 1: HOME / ABOUT ---
+# --- Halaman 1: HOME (Cover Page) ---
 def home_view(request):
-    """Menampilkan halaman Home/About statis dan tombol mulai."""
+    """Menampilkan halaman Home/Cover dengan hero section dan CTA."""
     # Menghapus data sesi lama saat user memulai dari awal
     if DATA_MENTAH_KEY in request.session:
         del request.session[DATA_MENTAH_KEY]
@@ -21,6 +21,11 @@ def home_view(request):
         del request.session[DATA_BERSIH_KEY]
         
     return render(request, 'core_app/home.html')
+
+# --- Halaman About ---
+def about_view(request):
+    """Menampilkan halaman About dengan detail teknis sistem."""
+    return render(request, 'core_app/about.html')
 
 
 # --- Halaman 2: INPUT LINK & SCRAPING ---
@@ -138,8 +143,14 @@ def results_view(request):
             df_bersih = pd.read_json(data_bersih_json, orient='split')
             texts_to_predict = df_bersih['text_for_vector'].tolist()
             
-            TFIDF, XGB_MODEL, ADABOOST_MODEL, _ = get_loaded_models()
-            xgb_labels, adaboost_labels = prediksi_final(texts_to_predict, TFIDF, XGB_MODEL, ADABOOST_MODEL)
+            XGB_VECTORIZER, ADABOOST_VECTORIZER, XGB_MODEL, ADABOOST_MODEL, _ = get_loaded_models()
+            xgb_labels, adaboost_labels = prediksi_final(
+                texts_to_predict,
+                XGB_VECTORIZER,
+                ADABOOST_VECTORIZER,
+                XGB_MODEL,
+                ADABOOST_MODEL
+            )
             
             results_df = df_bersih.copy()
             results_df['Prediksi_XGBoost'] = xgb_labels
@@ -167,10 +178,16 @@ def results_view(request):
         texts_to_predict = df_bersih['text_for_vector'].tolist()
         
         # Dapatkan model yang dimuat
-        TFIDF, XGB_MODEL, ADABOOST_MODEL, _ = get_loaded_models()
+        XGB_VECTORIZER, ADABOOST_VECTORIZER, XGB_MODEL, ADABOOST_MODEL, _ = get_loaded_models()
         
         # Panggil fungsi prediksi final
-        xgb_labels, adaboost_labels = prediksi_final(texts_to_predict, TFIDF, XGB_MODEL, ADABOOST_MODEL)
+        xgb_labels, adaboost_labels = prediksi_final(
+            texts_to_predict,
+            XGB_VECTORIZER,
+            ADABOOST_VECTORIZER,
+            XGB_MODEL,
+            ADABOOST_MODEL
+        )
         
         # 3. Tambah Hasil ke DataFrame & Hitung Statistik
         results_df = df_bersih.copy()
